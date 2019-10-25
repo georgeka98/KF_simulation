@@ -1,4 +1,6 @@
 #include <iostream>
+
+#include "matrix_lib.hpp"
 #include <math.h>
 
 using namespace std;
