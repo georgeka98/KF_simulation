@@ -2,6 +2,7 @@
 
 #include "matrix_lib.hpp"
 #include <math.h>
+// #include <cmath>
 
 using namespace std;
 // using namespace Math;
@@ -29,20 +30,39 @@ using namespace std;
 
     }
 
+    Matrix Matrix::transpose(){
+
+      int n = 9;
+
+      Matrix transpose;
+
+      for(int row = 0; row < 3; row++)
+      {
+        for(int clm = 0; clm < 3; clm++)
+        {
+          int entry = clm + row*3;
+          transpose.entries_[entry] = entries_[entry + (clm - row)*2];
+        }
+      }
+
+      return transpose;
+
+    }
+
     Matrix Matrix::operator+(const Matrix &other){ //why cannot use the namespace Matrix:: here?
 
       Matrix result;
 
       vector<float> result_v;
-      result_v.push_back(m.entries_[0] + other.entries_[0]);
-      result_v.push_back(m.entries_[1] + other.entries_[1]);
-      result_v.push_back(m.entries_[2] + other.entries_[2]);
-      result_v.push_back(m.entries_[3] + other.entries_[3]);
-      result_v.push_back(m.entries_[4] + other.entries_[4]);
-      result_v.push_back(m.entries_[5] + other.entries_[5]);
-      result_v.push_back(m.entries_[6] + other.entries_[6]);
-      result_v.push_back(m.entries_[7] + other.entries_[7]);
-      result_v.push_back(m.entries_[8] + other.entries_[8]);
+      result_v.push_back(entries_[0] + other.entries_[0]);
+      result_v.push_back(entries_[1] + other.entries_[1]);
+      result_v.push_back(entries_[2] + other.entries_[2]);
+      result_v.push_back(entries_[3] + other.entries_[3]);
+      result_v.push_back(entries_[4] + other.entries_[4]);
+      result_v.push_back(entries_[5] + other.entries_[5]);
+      result_v.push_back(entries_[6] + other.entries_[6]);
+      result_v.push_back(entries_[7] + other.entries_[7]);
+      result_v.push_back(entries_[8] + other.entries_[8]);
       result.set_matrix(result_v);
 
       return result;
@@ -54,15 +74,15 @@ using namespace std;
       Matrix result;
 
       vector<float> result_v;
-      result_v.push_back(m.entries_[0] - other.entries_[0]);
-      result_v.push_back(m.entries_[1] - other.entries_[1]);
-      result_v.push_back(m.entries_[2] - other.entries_[2]);
-      result_v.push_back(m.entries_[3] - other.entries_[3]);
-      result_v.push_back(m.entries_[4] - other.entries_[4]);
-      result_v.push_back(m.entries_[5] - other.entries_[5]);
-      result_v.push_back(m.entries_[6] - other.entries_[6]);
-      result_v.push_back(m.entries_[7] - other.entries_[7]);
-      result_v.push_back(m.entries_[8] - other.entries_[8]);
+      result_v.push_back(entries_[0] - other.entries_[0]);
+      result_v.push_back(entries_[1] - other.entries_[1]);
+      result_v.push_back(entries_[2] - other.entries_[2]);
+      result_v.push_back(entries_[3] - other.entries_[3]);
+      result_v.push_back(entries_[4] - other.entries_[4]);
+      result_v.push_back(entries_[5] - other.entries_[5]);
+      result_v.push_back(entries_[6] - other.entries_[6]);
+      result_v.push_back(entries_[7] - other.entries_[7]);
+      result_v.push_back(entries_[8] - other.entries_[8]);
       result.set_matrix(result_v);
 
       return result;
@@ -81,15 +101,8 @@ using namespace std;
         int entry_result = 0;
 
         for(int j = 0; j < 3; j++){
-          entry_result = entry_result + m.entries_[j + 3*floor(entry/3)]*other.entries_[j+3*j];
-
-          cout << other.entries_[j+3*j];
-          cout << ' ';
-          cout <<  m.entries_[j + 3*floor(entry/3)];
-          cout << '\n';
+          entry_result = entry_result + entries_[j + 3*floor(entry/3)]*other.entries_[3*j + entry % 3];
         }
-
-        // result_v[0] = entry_result;
 
         result_v.push_back(entry_result);
 
