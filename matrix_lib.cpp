@@ -5,6 +5,7 @@
 
 using namespace std;
 // using namespace Math;
+// using Matrix;
 
 // namespace Math{
 
@@ -28,7 +29,7 @@ using namespace std;
 
     }
 
-    Matrix operator+(const Matrix &other){ //why cannot use the namespace Matrix:: here?
+    Matrix Matrix::operator+(const Matrix &other){ //why cannot use the namespace Matrix:: here?
 
       Matrix result;
 
@@ -80,11 +81,11 @@ using namespace std;
         int entry_result = 0;
 
         for(int j = 0; j < 3; j++){
-          entry_result = entry_result + m.entries_[j + floor(entry/3)]*other.entries_[j+3];
+          entry_result = entry_result + m.entries_[j + 3*floor(entry/3)]*other.entries_[j+3*j];
 
-          cout << other.entries_[j+3];
+          cout << other.entries_[j+3*j];
           cout << ' ';
-          cout << floor(entry/3);
+          cout <<  m.entries_[j + 3*floor(entry/3)];
           cout << '\n';
         }
 

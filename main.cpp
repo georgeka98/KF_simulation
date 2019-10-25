@@ -85,7 +85,7 @@
 
 // }
 
-#include "matrix_lib.cpp"
+#include "matrix_lib.hpp"
 #include <iostream>
 #include <cmath>
 #include <math.h>
