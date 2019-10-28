@@ -56,25 +56,6 @@ using namespace std;
       Matrix guassian;
       guassian.entries_ = entries_;
 
-      // cout << guassian.entries_[0];
-      // cout << '\n';
-      // cout << guassian.entries_[1];
-      // cout << '\n';
-      // cout << guassian.entries_[2];
-      // cout << '\n';
-      // cout << guassian.entries_[3];
-      // cout << '\n';
-      // cout << guassian.entries_[4];
-      // cout << '\n';
-      // cout << guassian.entries_[5];
-      // cout << '\n';
-      // cout << guassian.entries_[6];
-      // cout << '\n';
-      // cout << guassian.entries_[7];
-      // cout << '\n';
-      // cout << guassian.entries_[8];
-      // cout << '\n';
-
       int n = 3;
       vector<float> inverse;
       inverse.push_back(1);
@@ -224,6 +205,11 @@ using namespace std;
 
       return result;
     }
+
+    // Matrix Matrix::operator*(const vector<float> &entries)
+    // {
+    //   return 
+    // }
 
     Matrix Matrix::operator = (const vector<float> entries)
     {

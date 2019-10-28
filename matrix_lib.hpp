@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include "vector.hpp"
 
 using namespace std;
 
@@ -21,7 +22,7 @@ using namespace std;
 
             Matrix operator*(const Matrix &other);
 
-            Matrix operator*(const vector<float> &entries); // matrix * vector
+            Vector operator*(const Vector &ohter); // matrix * vector
 
             Matrix inverse(const Matrix &other);
 
@@ -40,6 +41,8 @@ using namespace std;
             Matrix() : entries_({0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0}) {  }
             //{0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0}
             vector<float> entries_;
+            int n_ = 3; // dimention e.g 3 = 3x3 matrix
+            int m_ = 9;
 
     };
         
