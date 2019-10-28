@@ -49,6 +49,116 @@ using namespace std;
 
     }
 
+    Matrix Matrix::inverse(){
+
+      Matrix result;
+
+      Matrix guassian;
+      guassian.entries_ = entries_;
+
+      // cout << guassian.entries_[0];
+      // cout << '\n';
+      // cout << guassian.entries_[1];
+      // cout << '\n';
+      // cout << guassian.entries_[2];
+      // cout << '\n';
+      // cout << guassian.entries_[3];
+      // cout << '\n';
+      // cout << guassian.entries_[4];
+      // cout << '\n';
+      // cout << guassian.entries_[5];
+      // cout << '\n';
+      // cout << guassian.entries_[6];
+      // cout << '\n';
+      // cout << guassian.entries_[7];
+      // cout << '\n';
+      // cout << guassian.entries_[8];
+      // cout << '\n';
+
+      int n = 3;
+      vector<float> inverse;
+      inverse.push_back(1);
+      inverse.push_back(0);
+      inverse.push_back(0);
+      inverse.push_back(0);
+      inverse.push_back(1);
+      inverse.push_back(0);
+      inverse.push_back(0);
+      inverse.push_back(0);
+      inverse.push_back(1);
+
+      bool invalid = false;
+
+      for(int row = 0; row < n; row++)
+      {
+        // getting the pivot. only gets the diagnonals
+        float diag_focus = guassian.entries_[row + n*row];
+
+        if( diag_focus == 0){
+          for(int swap_row = row; swap_row < n; swap_row++){
+            if(guassian.entries_[row + n*swap_row] != 0){
+              diag_focus = guassian.entries_[row + n*swap_row];
+              //switching row
+              for(int clm = 0; clm < n; clm++){
+                float g_swap = guassian.entries_[clm + n*row];
+                guassian.entries_[clm + n*row] = guassian.entries_[clm + n*swap_row];
+                guassian.entries_[clm + n*swap_row] = g_swap;
+
+                float i_swap = inverse[clm + n*row];
+                inverse[clm + n*row] = inverse[clm + n*swap_row];
+                inverse[clm + n*swap_row] = i_swap;
+              }
+            }
+            if(swap_row == n-1){
+
+            }
+          }
+        }
+
+        if (invalid == true){
+          break;
+        }
+
+        // row = row/diag_focus
+        // redusing the focus pivot to 1 eg [3,1,4] becomes [1,1/3,4/3]
+        for (int clm = 0; clm < n; clm++)
+        {
+          guassian.entries_[clm + n*row] = guassian.entries_[clm + n*row]/diag_focus;
+          inverse[clm + n*row] = inverse[clm + n*row]/diag_focus;
+        }
+
+        // reduce_row = reduce_row - x*row
+        // reducing all entries of the column to which we got diag_focus to 0
+        for (int reduce_row = 0; reduce_row < n; reduce_row++)
+        {
+          if (reduce_row != row)
+          {
+            // diagnonal pivot entry - reducing all entries of the column to 0.
+            float first_entry = guassian.entries_[row + n*reduce_row];
+
+            for(int clm = 0; clm < n; clm++)
+            {
+              guassian.entries_[clm + n*reduce_row] = guassian.entries_[clm + n*reduce_row] - guassian.entries_[clm + n*row]*first_entry;
+              inverse[clm + n*reduce_row] = inverse[clm + n*reduce_row] - inverse[clm + n*row]*first_entry;
+            }
+          }
+          // cout << guassian.entries_[0] << ' ' << guassian.entries_[1] << ' ' << guassian.entries_[2] << '\n' <<
+          //    guassian.entries_[3] << ' ' << guassian.entries_[4] << ' ' << guassian.entries_[5] << '\n' << 
+          //    guassian.entries_[6] << ' ' << guassian.entries_[7] << ' ' << guassian.entries_[8];
+          // cout << '\n';
+          // cout << '\n';
+        }
+      }
+
+
+      if (!invalid){
+        result.set_matrix(inverse);
+      }
+
+      return result;
+
+    }
+
     Matrix Matrix::operator+(const Matrix &other){ //why cannot use the namespace Matrix:: here?
 
       Matrix result;

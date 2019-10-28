@@ -21,9 +21,13 @@ using namespace std;
 
             Matrix operator*(const Matrix &other);
 
+            Matrix operator*(const vector<float> &entries); // matrix * vector
+
             Matrix inverse(const Matrix &other);
 
             Matrix transpose(); //keep in mind that traspose DOES NOT update the matrix. If you would like to update it store it on a new matrix.
+
+            Matrix inverse();
 
             Matrix operator = (const vector<float> entries); // storing the entries of a given matrix as a vector format.
 

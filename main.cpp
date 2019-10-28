@@ -105,11 +105,11 @@ int main(){
          0,0,1};
 
     Matrix A;
-    A = {1, 0.5, 0.125,
-         0, 1  , 0.5  ,
-         0, 0  , 1     };
+    A = {1, 3  , 2,
+         2, 6  , 3,
+         5, 7  , 1     };
 
-    Matrix B = H.transpose();
+    Matrix B = A.inverse();
 
     std::cout << B;
 
