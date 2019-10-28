@@ -98,20 +98,69 @@
 
 int main(){
 
-    srand(time(0));
-    Matrix H;
-    H = {1,0,0,
-         0,1,0,
-         0,0,1};
+     Matrix H;
+     H = {1,0,0,
+          0,1,0,
+          0,0,1};
 
-    Matrix A;
-    A = {1, 3  , 2,
-         2, 6  , 3,
-         5, 7  , 1     };
+     Matrix I;
+     I = {1,0,0,
+          0,1,0,
+          0,0,1};
 
-    Matrix B = A.inverse();
+     Matrix A;
+     A = {1, 0.5, 0.125,
+          0, 1  , 0.5,
+          0, 0  , 1     };
 
-    std::cout << B;
+     Matrix R;
+     R = {0.005, 0.005, 0.005,
+          0.005, 0.005, 0.005,
+          0.005, 0.005, 0.005};
+
+     Matrix P;
+     P = {0.5, 0.5, 0.5,
+          0.5, 0.5, 0.5,
+          0.5, 0.5, 0.5};
+
+     Matrix Q;
+     Q = {0.02, 0.02, 0.02,
+          0.02, 0.02, 0.02,
+          0.02, 0.02, 0.02};
+
+     Matrix K;
+     K = {0.0, 0.0, 0.0,
+          0.0, 0.0, 0.0,
+          0.0, 0.0, 0.0};
+
+     Vector s;
+     s = {0,0,0};
+
+     Vector s_p;
+     s_p = {0,0,0};
+
+     Vector z;
+     z = {1.3,3.2,0.443};
+
+     std::cout << s + A*s;
+     std::cout << A * P * A.transpose() + Q;
+     std::cout << A;
+     std::cout << P;
+     std::cout << (H * P * H.transpose() + R);
+     std::cout << H;
+     std::cout << P;
+     std::cout << (H * P) * H.transpose();
+
+     K = (P * H.transpose()) * (H * P * H.transpose() + R).inverse();
+     s = s + K * (z - H * s);
+     P = (I - K * H) * P;
+
+     std::cout << H;
+     std::cout << P;
+     std::cout << H * P * H.transpose();
+
+
+     // srand(time(0));
 
     // double fx1 = ((double) rand() / (RAND_MAX));
     // double fx2 = ((double) rand() / (RAND_MAX));

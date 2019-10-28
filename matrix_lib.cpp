@@ -189,7 +189,7 @@ using namespace std;
 
       for(int entry = 0; entry < 9; entry++){
 
-        int entry_result = 0;
+        float entry_result = 0;
 
         for(int j = 0; j < 3; j++){
           entry_result = entry_result + entries_[j + 3*floor(entry/3)]*other.entries_[3*j + entry % 3];
@@ -206,10 +206,26 @@ using namespace std;
       return result;
     }
 
-    // Matrix Matrix::operator*(const vector<float> &entries)
-    // {
-    //   return 
-    // }
+    Vector Matrix::operator*(const Vector &other)
+    {
+      Vector result;
+      vector<float> result_v;
+      int dimention = result.n_;
+      
+      for(int row = 0; row < dimention; row++){
+        
+        float row_result = 0;
+        for(int clm = 0; clm < dimention; clm++){
+          row_result = row_result + entries_[clm+dimention*row]*other.entries_[clm];
+        }
+        result_v.push_back(row_result);
+      }
+
+      result.set_vector(result_v);
+
+      return result;
+
+    }
 
     Matrix Matrix::operator = (const vector<float> entries)
     {
@@ -229,7 +245,7 @@ using namespace std;
     {
       out << matrix.entries_[0] << ' ' << matrix.entries_[1] << ' ' << matrix.entries_[2] << '\n' <<
              matrix.entries_[3] << ' ' << matrix.entries_[4] << ' ' << matrix.entries_[5] << '\n' << 
-             matrix.entries_[6] << ' ' << matrix.entries_[7] << ' ' << matrix.entries_[8];
+             matrix.entries_[6] << ' ' << matrix.entries_[7] << ' ' << matrix.entries_[8] << '\n';
 
       // TODO How about convert the abobe int oa for loop? Have a look at concatination with chars and strings.
 

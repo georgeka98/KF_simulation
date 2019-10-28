@@ -70,11 +70,6 @@ using namespace std;
       return dot_product;
     }
 
-    // Matrix Matrix::operator*(const vector<float> &entries)
-    // {
-    //   return 
-    // }
-
     Vector Vector::operator = (const vector<float> &entries)
     {
       set_vector(entries);
