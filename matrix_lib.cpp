@@ -17,6 +17,7 @@ using namespace std;
     Matrix::Matrix(int rows, int columns){  
 
       set_size(rows, columns);
+      set_matrix({0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0});
 
     };
 
@@ -40,7 +41,7 @@ using namespace std;
 
     Matrix Matrix::transpose(){
 
-      Matrix transpose;
+      Matrix transpose(columns_,rows_);
 
       for(int row = 0; row < rows_; row++)
       {
@@ -60,11 +61,13 @@ using namespace std;
 
       Matrix result(columns_, rows_);
 
+      // std::cout << 
+
       if (columns_ != rows_){
         
         int n = rows_; // indicating the matrix is
 
-        Matrix guassian(n, n);
+        Matrix guassian(n, n); // square matrix
         guassian.entries_ = entries_;
 
         vector<float> inverse;
@@ -180,30 +183,33 @@ using namespace std;
 
     Matrix Matrix::operator * (const Matrix &other){
 
-      Matrix result(rows_,columns_);
+      Matrix result(3,3);
 
-      vector<float> result_v;
+      if (columns_ == other.rows_){
+        
+        vector<float> result_v;
+        int n = rows_*other.columns_;
 
-      int n = rows_ * columns_;
+        for(int entry = 0; entry < n; entry++){
 
-      for(int entry = 0; entry < n; entry++){
+          float entry_result = 0;
 
-        float entry_result = 0;
+          for(int j = 0; j < columns_; j++){
+            entry_result = entry_result + entries_[j + rows_*floor(entry/columns_)]*other.entries_[other.columns_*j + entry % other.rows_];
+          }
 
-        for(int j = 0; j < n; j++){
-          entry_result = entry_result + entries_[j + n*floor(entry/n)]*other.entries_[n*j + entry % n];
+          result_v.push_back(entry_result);
+
         }
 
-        result_v.push_back(entry_result);
+        // the for loop is wrong above. Please fix it as soon as you are back.
 
+        result.set_matrix(result_v);
       }
-
-      // the for loop is wrong above. Please fix it as soon as you are back.
-
-      result.set_matrix(result_v);
 
       return result;
     }
+    
 
     Vector Matrix::operator*(const Vector &other)
     {
