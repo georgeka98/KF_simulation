@@ -252,9 +252,19 @@ using namespace std;
 
     std::ostream& operator<<(std::ostream& out, const Matrix &matrix)
     {
-      out << matrix.entries_[0] << ' ' << matrix.entries_[1] << ' ' << matrix.entries_[2] << '\n' <<
-             matrix.entries_[3] << ' ' << matrix.entries_[4] << ' ' << matrix.entries_[5] << '\n' << 
-             matrix.entries_[6] << ' ' << matrix.entries_[7] << ' ' << matrix.entries_[8] << '\n';
+
+      for(int i = 0; i < matrix.rows_; i++)
+      {
+        for(int j = 0; j < matrix.columns_; j++)
+        {
+          if (j == matrix.columns_ - 1){
+            out << matrix.entries_[j + i * matrix.rows_] << '\n'; // printing last column at row i
+          }
+          else{
+            out << matrix.entries_[j + i * matrix.rows_] << ' '; // printing column j at row i
+          }
+        }
+      }
 
       // TODO How about convert the abobe int oa for loop? Have a look at concatination with chars and strings.
 
