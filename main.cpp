@@ -133,11 +133,6 @@ int main(){
           0.0242, 0.05322, 0.0214,
           0.0132, 0.021, 0.023};
 
-     Matrix K;
-     K = {0.0, 0.0, 0.0,
-          0.0, 0.0, 0.0,
-          0.0, 0.0, 0.0};
-
      Vector s;
      s = {0,0,0};
 
@@ -150,14 +145,9 @@ int main(){
      KalmanFilter::KalmanFilter KF = KalmanFilter::KalmanFilter(3,3,0);
      KF.init(s, A, P, Q, H, R);
 
-     KF.x_ = s;
-     KF.P_ = P;
-
-     std::cout << KF.P_;
-
+     std::cout << "transition: \n";
+     KF.filter(0.05,s,z);
      std::cout << KF.get_state();
-     KF.predict_covariance();
-     std::cout << KF.get_covariance();
 
 
      // srand(time(0));

@@ -38,13 +38,18 @@ namespace KalmanFilter{
       Matrix get_covariance();
 
       // filter using 5 KF equations
-      void filter(float dt, Vector s);  //!! Two variables missing, update this! (real life values) - fixed
+      /*
+      * dt : Time interval
+      * s  : state
+      * z  : sensor measurement vector
+      */
+      void filter(float dt, Vector s, Vector z);  //!! Two variables missing, update this! (real life values) - fixed
 
     public:
       // f1 : predict state
       void predict_state();
       // f2 : estimate state (update based on measurement)
-      void estimate_state(Matrix K);
+      void estimate_state(Matrix K, Vector z);
       // f3 : kalman gain
       Matrix kalman_gain();
       // f4 : predict state covariance

@@ -4,8 +4,16 @@
 
 namespace KalmanFilter{
 
-    KalmanFilter::init(){
-
+    void KalmanFilter::init(Vector x, Matrix A, Matrix P, Matrix Q, Matrix H, Matrix R){
+        x_ = x;
+        A_ = A;
+        P_ = P;
+        Q_ = Q;
+        H_ = H;
+        R_ = R;
+        I_ = {  1,0,0,
+                0,1,0,
+                0,0,1};
     }
 
     KalmanFilter::KalmanFilter(uint8_t n, uint8_t m, uint8_t k)
@@ -38,7 +46,7 @@ namespace KalmanFilter{
         R_ = R;
     }
 
-    void KalmanFilter::filter(float dt, Vector s){
+    void KalmanFilter::filter(float dt, Vector s, Vector z){
         KalmanFilter::update_state_transition(dt);
 
         KalmanFilter::predict_state();
@@ -48,7 +56,7 @@ namespace KalmanFilter{
 
         // KalmanFilter::get_data(); // manipulate sensor data and set measurement vector
 
-        KalmanFilter::estimate_state(K);
+        KalmanFilter::estimate_state(K,z);
         KalmanFilter::estimate_covariance(K);
     }
 
@@ -65,8 +73,8 @@ namespace KalmanFilter{
         return K;
     }
 
-    void KalmanFilter::estimate_state(Matrix K){
-        x_ = x_ + K * (z_ - H_ * x_);
+    void KalmanFilter::estimate_state(Matrix K, Vector z){
+        x_ = x_ + K * (z - H_ * x_);
     }
 
     void KalmanFilter::estimate_covariance(Matrix K){

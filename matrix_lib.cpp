@@ -2,7 +2,7 @@
 
 #include "matrix_lib.hpp"
 #include <math.h>
-// #include <cmath>
+#include <cmath>
 
 using namespace std;
 // using namespace Math;
@@ -60,15 +60,17 @@ using namespace std;
 
       int n = 3;
       vector<float> inverse;
-      inverse.push_back(1);
-      inverse.push_back(0);
-      inverse.push_back(0);
-      inverse.push_back(0);
-      inverse.push_back(1);
-      inverse.push_back(0);
-      inverse.push_back(0);
-      inverse.push_back(0);
-      inverse.push_back(1);
+
+      for(int row = 0; row < n; row++){
+        for(int clm = 0; clm < n; clm++){
+          if (clm == row){
+            inverse.push_back(1);
+          }
+          else{
+            inverse.push_back(0);
+          }
+        }
+      }
 
       bool invalid = false;
 
@@ -145,17 +147,14 @@ using namespace std;
     Matrix Matrix::operator+(const Matrix &other){ //why cannot use the namespace Matrix:: here?
 
       Matrix result;
+      int n = pow(sqrt(9), 2);
 
       vector<float> result_v;
-      result_v.push_back(entries_[0] + other.entries_[0]);
-      result_v.push_back(entries_[1] + other.entries_[1]);
-      result_v.push_back(entries_[2] + other.entries_[2]);
-      result_v.push_back(entries_[3] + other.entries_[3]);
-      result_v.push_back(entries_[4] + other.entries_[4]);
-      result_v.push_back(entries_[5] + other.entries_[5]);
-      result_v.push_back(entries_[6] + other.entries_[6]);
-      result_v.push_back(entries_[7] + other.entries_[7]);
-      result_v.push_back(entries_[8] + other.entries_[8]);
+
+      for(int i = 0; i < n; i++){
+        result_v.push_back(entries_[i] + other.entries_[i]);
+      }
+
       result.set_matrix(result_v);
 
       return result;
@@ -166,16 +165,13 @@ using namespace std;
 
       Matrix result;
 
+      int n = pow(sqrt(9), 2);
       vector<float> result_v;
-      result_v.push_back(entries_[0] - other.entries_[0]);
-      result_v.push_back(entries_[1] - other.entries_[1]);
-      result_v.push_back(entries_[2] - other.entries_[2]);
-      result_v.push_back(entries_[3] - other.entries_[3]);
-      result_v.push_back(entries_[4] - other.entries_[4]);
-      result_v.push_back(entries_[5] - other.entries_[5]);
-      result_v.push_back(entries_[6] - other.entries_[6]);
-      result_v.push_back(entries_[7] - other.entries_[7]);
-      result_v.push_back(entries_[8] - other.entries_[8]);
+
+      for(int i = 0; i < n; i++){
+        result_v.push_back(entries_[i] - other.entries_[i]);
+      }
+
       result.set_matrix(result_v);
 
       return result;
@@ -193,8 +189,8 @@ using namespace std;
 
         float entry_result = 0;
 
-        for(int j = 0; j < 3; j++){
-          entry_result = entry_result + entries_[j + 3*floor(entry/3)]*other.entries_[3*j + entry % 3];
+        for(int j = 0; j < n; j++){
+          entry_result = entry_result + entries_[j + n*floor(entry/n)]*other.entries_[n*j + entry % n];
         }
 
         result_v.push_back(entry_result);
