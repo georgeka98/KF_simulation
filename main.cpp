@@ -145,22 +145,11 @@ int main(){
      KalmanFilter::KalmanFilter KF = KalmanFilter::KalmanFilter(3,1,0);
      KF.init(s, A, P, Q, H, R);
 
-     std::cout << "transition: \n";
-     // KF.filter(0.05,s,z);
-     std::cout << KF.A_ * KF.x_;
-     std::cout << "Covariance: \n";
-     std::cout << (KF.P_);
-     std::cout << "H^T: \n";
-     std::cout << KF.H_.transpose();
-     std::cout << "H*P*H^T: \n";
-     std::cout << (KF.H_ * KF.P_ * KF.H_.transpose() + KF.R_);
-     std::cout <<  (KF.H_ * KF.P_ * KF.H_.transpose() + KF.R_).inverse();
-     //  * (KF.H_ * KF.P_ * KF.H_.transpose() + KF.R_).inverse();
-     // std::cout << "estimate state: \n";
-     // std::cout << H * Q * z;
-     // std::cout << "estimate covariacne: \n";
-     // std::cout << H * Q * z;
-     // std::cout << KF.get_state();
+     std::cout << "state: \n";
+     std::cout << KF.get_state();
+     KF.filter(0.05,s,z);
+     std::cout << "next state: \n";
+     std::cout << KF.get_state();
 
 
      // srand(time(0));
