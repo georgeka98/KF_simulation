@@ -111,7 +111,8 @@ int main(){
      Matrix I(3,3);
      I = {1,0,0,
           0,1,0,
-          0,0,1};
+          0,0,1,
+          0,0,0};
 
      Matrix A(3,3);
      A = {1, 0.5, 0.125,
@@ -140,7 +141,7 @@ int main(){
      s_p = {0,0,0};
 
      Vector z(3);
-     z = {1.3,3.2,0.443};
+     z = {1.3,3.2,0.443, 0.2};
 
      KalmanFilter::KalmanFilter KF = KalmanFilter::KalmanFilter(3,1,0);
      KF.init(s, A, P, Q, H, R);
