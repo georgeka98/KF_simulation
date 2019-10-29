@@ -24,22 +24,17 @@ vector<vector<float>> demo_IMU_data::get_data()
         while (! myfile.eof() )
         {
             getline (myfile,line, '\t');
-            cout << line << '\n';
+            dt_acc.at(0) = strtof((line).c_str(),0); //string to flaot
 
-            dt_acc.at(i) = strtof((line).c_str(),0); //string to flaot
-            i++;
+            getline (myfile,line, '\n');
+            dt_acc.at(1) = strtof((line).c_str(),0); //string to flaot
 
-            if (i == 1)
-            {
+            data.push_back(dt_acc);
 
-                data.push_back(dt_acc);
-
-                //resetting touple
-                dt_acc.at(0) = 0;
-                dt_acc.at(1) = 0;
+            //resetting touple
+            dt_acc.at(0) = 0;
+            dt_acc.at(1) = 0;
                 
-                i = 0;
-            }
         }
         myfile.close();
     }

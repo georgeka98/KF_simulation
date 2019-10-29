@@ -142,22 +142,38 @@ int main(){
      s_p = {0,0,0};
 
      Vector z(3);
-     z = {1.3,3.2,0.443, 0.2};
 
      KalmanFilter::KalmanFilter KF = KalmanFilter::KalmanFilter(3,1,0);
      KF.init(s, A, P, Q, H, R);
 
-     std::cout << "state: \n";
-     std::cout << KF.get_state();
-     KF.filter(0.05,s,z);
-     std::cout << "next state: \n";
-     std::cout << KF.get_state();
+     // std::cout << "state: \n";
+     // std::cout << KF.get_state();
+     // KF.filter(0.05,s,z);
+     // std::cout << "next state: \n";
+     // std::cout << KF.get_state();
 
-     std::cout << P;
+     // std::cout << P;
 
 
      demo_IMU_data IMU_demo = demo_IMU_data("state_acc.txt");
-     IMU_demo.get_data();
+     vector<vector<float>> data = IMU_demo.get_data();
+
+     for(std::size_t i=0; i < data.size(); ++i)
+     {
+          if (i == 0){
+               z = {0,0,data[i][1]};
+          }
+          else{
+               float dt = (float)0.001*(data[i][0] - data[i-1][0]);
+               z = {z.entries_[0] + z.entries_[1]*dt + (float)0.5*dt*dt*data[i][1],
+                    z.entries_[1]+data[i][1]*dt,
+                    data[i][1]
+                    };
+          }
+          KF.filter(data[i][0]/1000,s,z);
+          std::cout << "next state: \n";
+          std::cout << KF.get_state();
+     }
 
 
      // srand(time(0));
