@@ -19,7 +19,7 @@ namespace KalmanFilter{
     KalmanFilter::KalmanFilter(uint8_t n, uint8_t m, uint8_t k)
         : n_(n)
         , m_(m)
-        , k_(0){
+        , k_(k){
     }
 
     void KalmanFilter::set_initial(Vector init){

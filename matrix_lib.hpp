@@ -10,11 +10,13 @@ using namespace std;
 
         public:
 
-            Matrix(vector<float> entries);
+            Matrix(int rows, int columns);
+
+            void set_size(int rows, int columns);
 
             void set_matrix(const vector<float> entries);
 
-            Matrix get_matrix();
+            vector<float> get_matrix();
 
             Matrix operator+(const Matrix &other);
 
@@ -38,11 +40,16 @@ using namespace std;
 
         public:
 
-            Matrix() : entries_({0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0}) {  }
+            Matrix() : 
+                      rows_(0)
+                    , columns_(0)
+                    , entries_({0.0,0.0,0.0,
+                                0.0,0.0,0.0,
+                                0.0,0.0,0.0}) {  }
             //{0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0}
-            vector<float> entries_;
-            int n_ = 3; // dimention e.g 3 = 3x3 matrix
-            int m_ = 9;
+            int             rows_;
+            int             columns_;
+            vector<float>   entries_;
 
     };
         

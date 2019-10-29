@@ -14,33 +14,38 @@ using namespace std;
 
     Matrix m;
 
-    Matrix::Matrix(vector<float> entries){  
+    Matrix::Matrix(int rows, int columns){  
 
-      set_matrix(entries);
-
-    };
-
-    Matrix Matrix::get_matrix(){
-      
-      return entries_;
+      set_size(rows, columns);
 
     };
-        
+
     void Matrix::set_matrix(const vector<float> entries){
       
       entries_ = entries; 
 
     }
 
-    Matrix Matrix::transpose(){
+    void Matrix::set_size(int rows, int columns){
+      
+      rows_ = rows; 
+      columns_ = columns; 
 
-      int n = 9;
+    }
+
+    vector<float> Matrix::get_matrix(){
+      
+      return entries_;
+
+    };
+
+    Matrix Matrix::transpose(){
 
       Matrix transpose;
 
-      for(int row = 0; row < 3; row++)
+      for(int row = 0; row < rows_; row++)
       {
-        for(int clm = 0; clm < 3; clm++)
+        for(int clm = 0; clm < columns_; clm++)
         {
           int entry = clm + row*3;
           transpose.entries_[entry] = entries_[entry + (clm - row)*2];
@@ -53,91 +58,89 @@ using namespace std;
 
     Matrix Matrix::inverse(){
 
-      Matrix result;
-
-      Matrix guassian;
-      guassian.entries_ = entries_;
-
-      int n = 3;
-      vector<float> inverse;
-
-      for(int row = 0; row < n; row++){
-        for(int clm = 0; clm < n; clm++){
-          if (clm == row){
-            inverse.push_back(1);
-          }
-          else{
-            inverse.push_back(0);
-          }
-        }
-      }
-
       bool invalid = false;
 
-      for(int row = 0; row < n; row++)
-      {
-        // getting the pivot. only gets the diagnonals
-        float diag_focus = guassian.entries_[row + n*row];
+      Matrix result(columns_, rows_);
 
-        if( diag_focus == 0){
-          for(int swap_row = row; swap_row < n; swap_row++){
-            if(guassian.entries_[row + n*swap_row] != 0){
-              diag_focus = guassian.entries_[row + n*swap_row];
-              //switching row
-              for(int clm = 0; clm < n; clm++){
-                float g_swap = guassian.entries_[clm + n*row];
-                guassian.entries_[clm + n*row] = guassian.entries_[clm + n*swap_row];
-                guassian.entries_[clm + n*swap_row] = g_swap;
+      if (columns_ != rows_){
+        
+        int n = rows_; // indicating the matrix is
 
-                float i_swap = inverse[clm + n*row];
-                inverse[clm + n*row] = inverse[clm + n*swap_row];
-                inverse[clm + n*swap_row] = i_swap;
+        Matrix guassian(n, n);
+        guassian.entries_ = entries_;
+
+        vector<float> inverse;
+
+        for(int row = 0; row < n; row++){
+          for(int clm = 0; clm < columns_; clm++){
+            if (clm == row){
+              inverse.push_back(1);
+            }
+            else{
+              inverse.push_back(0);
+            }
+          }
+        }
+
+        for(int row = 0; row < n; row++)
+        {
+          // getting the pivot. only gets the diagnonals
+          float diag_focus = guassian.entries_[row + n*row];
+
+          if( diag_focus == 0){
+            for(int swap_row = row; swap_row < n; swap_row++){
+              if(guassian.entries_[row + n*swap_row] != 0){
+                diag_focus = guassian.entries_[row + n*swap_row];
+                //switching row
+                for(int clm = 0; clm < n; clm++){
+                  float g_swap = guassian.entries_[clm + n*row];
+                  guassian.entries_[clm + n*row] = guassian.entries_[clm + n*swap_row];
+                  guassian.entries_[clm + n*swap_row] = g_swap;
+
+                  float i_swap = inverse[clm + n*row];
+                  inverse[clm + n*row] = inverse[clm + n*swap_row];
+                  inverse[clm + n*swap_row] = i_swap;
+                }
+              }
+              if(swap_row == n-1){
+
               }
             }
-            if(swap_row == n-1){
-
-            }
           }
-        }
 
-        if (invalid == true){
-          break;
-        }
+          if (invalid == true){
+            break;
+          }
 
-        // row = row/diag_focus
-        // redusing the focus pivot to 1 eg [3,1,4] becomes [1,1/3,4/3]
-        for (int clm = 0; clm < n; clm++)
-        {
-          guassian.entries_[clm + n*row] = guassian.entries_[clm + n*row]/diag_focus;
-          inverse[clm + n*row] = inverse[clm + n*row]/diag_focus;
-        }
-
-        // reduce_row = reduce_row - x*row
-        // reducing all entries of the column to which we got diag_focus to 0
-        for (int reduce_row = 0; reduce_row < n; reduce_row++)
-        {
-          if (reduce_row != row)
+          // row = row/diag_focus
+          // redusing the focus pivot to 1 eg [3,1,4] becomes [1,1/3,4/3]
+          for (int clm = 0; clm < n; clm++)
           {
-            // diagnonal pivot entry - reducing all entries of the column to 0.
-            float first_entry = guassian.entries_[row + n*reduce_row];
+            guassian.entries_[clm + n*row] = guassian.entries_[clm + n*row]/diag_focus;
+            inverse[clm + n*row] = inverse[clm + n*row]/diag_focus;
+          }
 
-            for(int clm = 0; clm < n; clm++)
+          // reduce_row = reduce_row - x*row
+          // reducing all entries of the column to which we got diag_focus to 0
+          for (int reduce_row = 0; reduce_row < n; reduce_row++)
+          {
+            if (reduce_row != row)
             {
-              guassian.entries_[clm + n*reduce_row] = guassian.entries_[clm + n*reduce_row] - guassian.entries_[clm + n*row]*first_entry;
-              inverse[clm + n*reduce_row] = inverse[clm + n*reduce_row] - inverse[clm + n*row]*first_entry;
+              // diagnonal pivot entry - reducing all entries of the column to 0.
+              float first_entry = guassian.entries_[row + n*reduce_row];
+
+              for(int clm = 0; clm < n; clm++)
+              {
+                guassian.entries_[clm + n*reduce_row] = guassian.entries_[clm + n*reduce_row] - guassian.entries_[clm + n*row]*first_entry;
+                inverse[clm + n*reduce_row] = inverse[clm + n*reduce_row] - inverse[clm + n*row]*first_entry;
+              }
             }
           }
-          // cout << guassian.entries_[0] << ' ' << guassian.entries_[1] << ' ' << guassian.entries_[2] << '\n' <<
-          //    guassian.entries_[3] << ' ' << guassian.entries_[4] << ' ' << guassian.entries_[5] << '\n' << 
-          //    guassian.entries_[6] << ' ' << guassian.entries_[7] << ' ' << guassian.entries_[8];
-          // cout << '\n';
-          // cout << '\n';
         }
-      }
 
-
-      if (!invalid){
+        if (!invalid){
         result.set_matrix(inverse);
+        }
       }
 
       return result;
@@ -146,8 +149,8 @@ using namespace std;
 
     Matrix Matrix::operator+(const Matrix &other){ //why cannot use the namespace Matrix:: here?
 
-      Matrix result;
-      int n = pow(sqrt(9), 2);
+      Matrix result(rows_,columns_);
+      int n = rows_ * columns_;
 
       vector<float> result_v;
 
@@ -163,9 +166,9 @@ using namespace std;
 
     Matrix Matrix::operator - (const Matrix &other){
 
-      Matrix result;
+      Matrix result(rows_,columns_);
 
-      int n = pow(sqrt(9), 2);
+      int n = rows_ * columns_;
       vector<float> result_v;
 
       for(int i = 0; i < n; i++){
@@ -179,11 +182,11 @@ using namespace std;
 
     Matrix Matrix::operator * (const Matrix &other){
 
-      Matrix result;
+      Matrix result(rows_,columns_);
 
       vector<float> result_v;
 
-      int n = sqrt(9);
+      int n = rows_ * columns_;
 
       for(int entry = 0; entry < 9; entry++){
 
@@ -206,20 +209,25 @@ using namespace std;
 
     Vector Matrix::operator*(const Vector &other)
     {
-      Vector result;
-      vector<float> result_v;
-      int dimention = result.n_;
-      
-      for(int row = 0; row < dimention; row++){
-        
-        float row_result = 0;
-        for(int clm = 0; clm < dimention; clm++){
-          row_result = row_result + entries_[clm+dimention*row]*other.entries_[clm];
-        }
-        result_v.push_back(row_result);
-      }
 
-      result.set_vector(result_v);
+      Vector result(rows_);
+
+      if (rows_ == other_.size){
+
+        vector<float> result_v;
+        int dimention = result.n_;
+        
+        for(int row = 0; row < dimention; row++){
+          
+          float row_result = 0;
+          for(int clm = 0; clm < dimention; clm++){
+            row_result = row_result + entries_[clm+dimention*row]*other.entries_[clm];
+          }
+          result_v.push_back(row_result);
+        }
+
+        result.set_vector(result_v);
+      }
 
       return result;
 

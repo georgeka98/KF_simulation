@@ -142,7 +142,7 @@ int main(){
      Vector z;
      z = {1.3,3.2,0.443};
 
-     KalmanFilter::KalmanFilter KF = KalmanFilter::KalmanFilter(3,3,0);
+     KalmanFilter::KalmanFilter KF = KalmanFilter::KalmanFilter(9,3,0);
      KF.init(s, A, P, Q, H, R);
 
      std::cout << "transition: \n";
