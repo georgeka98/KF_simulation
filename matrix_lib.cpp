@@ -61,9 +61,7 @@ using namespace std;
 
       Matrix result(columns_, rows_);
 
-      // std::cout << 
-
-      if (columns_ != rows_){
+      if (columns_ == rows_){
         
         int n = rows_; // indicating the matrix is
 
@@ -140,7 +138,7 @@ using namespace std;
         }
 
         if (!invalid){
-        result.set_matrix(inverse);
+          result.set_matrix(inverse);
         }
       }
 

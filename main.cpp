@@ -153,8 +153,8 @@ int main(){
      std::cout << "H^T: \n";
      std::cout << KF.H_.transpose();
      std::cout << "H*P*H^T: \n";
-     std::cout << (KF.P_ * KF.H_.transpose());
-     std::cout <<  KF.H_ * KF.P_ * KF.H_.transpose()* (KF.H_ * KF.P_ * KF.H_.transpose() + KF.R_).inverse();
+     std::cout << (KF.H_ * KF.P_ * KF.H_.transpose() + KF.R_);
+     std::cout <<  (KF.H_ * KF.P_ * KF.H_.transpose() + KF.R_).inverse();
      //  * (KF.H_ * KF.P_ * KF.H_.transpose() + KF.R_).inverse();
      // std::cout << "estimate state: \n";
      // std::cout << H * Q * z;
