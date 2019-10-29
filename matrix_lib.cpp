@@ -22,7 +22,7 @@ using namespace std;
 
     void Matrix::set_matrix(const vector<float> entries){
       
-      entries_ = entries; 
+      entries_ = entries;
 
     }
 
@@ -33,10 +33,9 @@ using namespace std;
 
     }
 
-    vector<float> Matrix::get_matrix(){
-      
+    vector<float> Matrix::get_matrix()
+    {  
       return entries_;
-
     };
 
     Matrix Matrix::transpose(){
@@ -53,7 +52,6 @@ using namespace std;
       }
 
       return transpose;
-
     }
 
     Matrix Matrix::inverse(){
@@ -188,7 +186,7 @@ using namespace std;
 
       int n = rows_ * columns_;
 
-      for(int entry = 0; entry < 9; entry++){
+      for(int entry = 0; entry < n; entry++){
 
         float entry_result = 0;
 
@@ -212,10 +210,10 @@ using namespace std;
 
       Vector result(rows_);
 
-      if (rows_ == other_.size){
+      if (rows_ == other.size_){
 
         vector<float> result_v;
-        int dimention = result.n_;
+        int dimention = result.size_;
         
         for(int row = 0; row < dimention; row++){
           
@@ -243,9 +241,10 @@ using namespace std;
     Matrix Matrix::operator = (const Matrix matrix)
     {
       set_matrix(matrix.entries_);
+      set_size(matrix.rows_, matrix.columns_);
 
       return *this;
-    } 
+    }
 
     std::ostream& operator<<(std::ostream& out, const Matrix &matrix)
     {

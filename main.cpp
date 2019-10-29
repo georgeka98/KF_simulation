@@ -103,51 +103,64 @@
 
 int main(){
 
-     Matrix H;
+     Matrix H(3,3);
      H = {1,0,0,
           0,1,0,
           0,0,1};
 
-     Matrix I;
+     Matrix I(3,3);
      I = {1,0,0,
           0,1,0,
           0,0,1};
 
-     Matrix A;
+     Matrix A(3,3);
      A = {1, 0.5, 0.125,
           0, 1  , 0.5,
           0, 0  , 1     };
 
-     Matrix R;
+     Matrix R(3,3);
      R = {0.0051, 0.00225, 0.005431,
           0.0012, 0.0034, 0.00353,
           0.00566, 0.00541, 0.005};
 
-     Matrix P;
+     Matrix P(3,3);
      P = {0.5, 0.55, 0.5444,
           0.53, 0.41, 0.122,
           0.6, 0.3, 0.23};
 
-     Matrix Q;
+     Matrix Q(3,3);
      Q = {0.021, 0.022, 0.0243,
           0.0242, 0.05322, 0.0214,
           0.0132, 0.021, 0.023};
 
-     Vector s;
+     Vector s(3);
      s = {0,0,0};
 
-     Vector s_p;
+     Vector s_p(3);
      s_p = {0,0,0};
 
-     Vector z;
+     Vector z(3);
      z = {1.3,3.2,0.443};
 
-     KalmanFilter::KalmanFilter KF = KalmanFilter::KalmanFilter(9,3,0);
+     KalmanFilter::KalmanFilter KF = KalmanFilter::KalmanFilter(3,1,0);
      KF.init(s, A, P, Q, H, R);
 
      std::cout << "transition: \n";
-     KF.filter(0.05,s,z);
-     std::cout << KF.get_state();
+     // KF.filter(0.05,s,z);
+     std::cout << KF.A_ * KF.x_;
+     std::cout << "Covariance: \n";
+     std::cout << (KF.P_);
+     std::cout << "H^T: \n";
+     std::cout << KF.H_.transpose();
+     std::cout << "H*P*H^T: \n";
+     std::cout << (KF.P_ * KF.H_.transpose());
+     std::cout <<  KF.H_ * KF.P_ * KF.H_.transpose();
+     //  * (KF.H_ * KF.P_ * KF.H_.transpose() + KF.R_).inverse();
+     // std::cout << "estimate state: \n";
+     // std::cout << H * Q * z;
+     // std::cout << "estimate covariacne: \n";
+     // std::cout << H * Q * z;
+     // std::cout << KF.get_state();
 
 
      // srand(time(0));

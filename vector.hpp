@@ -7,11 +7,13 @@ class Vector{
 
     public:
 
-        Vector(vector<float> entries);
+        Vector(int size);
 
         void set_vector(const vector<float> entries);
 
-        Vector get_vector();
+        void set_size(int size);
+
+        vector<float> get_vector();
 
         Vector operator+(const Vector &other);
 
@@ -27,11 +29,11 @@ class Vector{
 
     public:
 
-        Vector() : entries_({0.0,0.0,0.0}) {};
+        Vector() : 
+                    entries_({0.0,0.0,0.0}),
+                    size_(0){};
 
         vector<float> entries_;
-
-        int n_ = 3; // dimention e.g 3 = 3x3 matrix
-        int m_ = 9;
+        int size_;
 
 };

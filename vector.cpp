@@ -10,32 +10,37 @@ using namespace std;
 
 // namespace Math{
 
-    Vector::Vector(vector<float> entries){  
+    Vector::Vector(int size){  
 
-      set_vector(entries);
-
-    };
-
-    Vector Vector::get_vector(){
-      
-      return entries_;
+      set_size(size);
 
     };
-        
-    void Vector::set_vector(const vector<float> entries){
-      
+
+    void Vector::set_vector(const vector<float> entries)
+    {
       entries_ = entries; 
-
     }
+
+    void Vector::set_size(int size)
+    {
+      size_ = size;
+    }
+
+    vector<float> Vector::get_vector()
+    {
+      return entries_;
+    };
 
     Vector Vector::operator+(const Vector &other){ //why cannot use the namespace Matrix:: here?
 
-      Vector result;
-
+      Vector result(size_);
       vector<float> result_v;
-      result_v.push_back(entries_[0] + other.entries_[0]);
-      result_v.push_back(entries_[1] + other.entries_[1]);
-      result_v.push_back(entries_[2] + other.entries_[2]);
+
+      for(int i = 0; i < size_; i++)
+      {
+        result_v.push_back(entries_[i] + other.entries_[i]);
+      }
+
       result.set_vector(result_v);
 
       return result;
@@ -44,12 +49,15 @@ using namespace std;
 
     Vector Vector::operator - (const Vector &other){
 
-      Vector result;
+      Vector result(size_);
 
       vector<float> result_v;
-      result_v.push_back(entries_[0] - other.entries_[0]);
-      result_v.push_back(entries_[1] - other.entries_[1]);
-      result_v.push_back(entries_[2] - other.entries_[2]);
+
+      for(int i = 0; i < size_; i++)
+      {
+        result_v.push_back(entries_[i] - other.entries_[i]);
+      }
+
       result.set_vector(result_v);
 
       return result;
@@ -57,14 +65,22 @@ using namespace std;
 
     float Vector::operator * (const Vector &other){
 
-      Vector result;
-      int dimention = result.n_;
+      Vector result(size_);
       float dot_product = 0;
 
-      for(int entry = 0; entry < dimention; entry++){
+      //vectors havethe same size
+      if (other.size_ == size_)
+      {
+        int dimention = result.size_;
+        float dot_product = 0;
 
-        dot_product += entries_[entry]*other.entries_[entry];
+        std::cout << dimention;
 
+        for(int entry = 0; entry < dimention; entry++){
+
+          dot_product += entries_[entry]*other.entries_[entry];
+
+        }
       }
 
       return dot_product;
@@ -80,6 +96,7 @@ using namespace std;
     Vector Vector::operator=(const Vector &vector)
     {
       set_vector(vector.entries_);
+      set_size(vector.size_);
 
       return *this;
     } 

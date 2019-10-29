@@ -11,9 +11,27 @@ namespace KalmanFilter{
         Q_ = Q;
         H_ = H;
         R_ = R;
-        I_ = {  1,0,0,
-                0,1,0,
-                0,0,1};
+
+        Matrix I(n_,n_);
+
+        //creating the init matrix. Find a way to add this to the matrix_lib as a method and not allow the user to assign a new value to it.
+        
+        vector <float> identity;
+        for(int row = 0; row < n_; row++){
+          for(int clm = 0; clm < n_; clm++){
+            if (clm == row){
+              identity.push_back(1);
+            }
+            else{
+              identity.push_back(0);
+            }
+          }
+        }
+
+        I.set_matrix(identity);
+
+        I_ = I;
+
     }
 
     KalmanFilter::KalmanFilter(uint8_t n, uint8_t m, uint8_t k)
@@ -21,6 +39,8 @@ namespace KalmanFilter{
         , m_(m)
         , k_(k){
     }
+
+    
 
     void KalmanFilter::set_initial(Vector init){
         x_ =  init;
@@ -52,7 +72,8 @@ namespace KalmanFilter{
         KalmanFilter::predict_state();
         KalmanFilter::predict_covariance();
 
-        Matrix K = KalmanFilter::kalman_gain();
+        Matrix K(n_, n_);
+        K = KalmanFilter::kalman_gain();
 
         // KalmanFilter::get_data(); // manipulate sensor data and set measurement vector
 
@@ -69,7 +90,8 @@ namespace KalmanFilter{
     }
 
     Matrix KalmanFilter::kalman_gain(){
-        Matrix K = (P_ * H_.transpose()) * (H_ * P_ * H_.transpose() + R_).inverse();
+        Matrix K(n_, n_);
+        K = (P_ * H_.transpose()) * (H_ * P_ * H_.transpose() + R_).inverse();
         return K;
     }
 
@@ -82,7 +104,7 @@ namespace KalmanFilter{
     }
 
     void KalmanFilter::update_state_transition(float dt){
-        Matrix A;
+        Matrix A(n_, n_);
 
         // for(int i = 0; i < n_; i++){
 
