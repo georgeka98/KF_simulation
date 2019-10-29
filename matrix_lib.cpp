@@ -10,6 +10,8 @@ using namespace std;
 
 // namespace Math{
 
+  // wheel encoders 20000RPM
+
     Matrix m;
 
     Matrix::Matrix(vector<float> entries){  

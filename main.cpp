@@ -85,7 +85,9 @@
 
 // }
 
-#include "matrix_lib.hpp"
+// #include "matrix_lib.cpp"
+#include "kalman_filter.hpp"
+// #include "vector.cpp"
 #include <iostream>
 #include <cmath>
 #include <math.h>
@@ -94,7 +96,10 @@
 #include <stdlib.h>
 #include <time.h>
 
+
+
 // #define M_PI;
+// using namespace KalmanFilter;
 
 int main(){
 
@@ -114,19 +119,19 @@ int main(){
           0, 0  , 1     };
 
      Matrix R;
-     R = {0.005, 0.005, 0.005,
-          0.005, 0.005, 0.005,
-          0.005, 0.005, 0.005};
+     R = {0.0051, 0.00225, 0.005431,
+          0.0012, 0.0034, 0.00353,
+          0.00566, 0.00541, 0.005};
 
      Matrix P;
-     P = {0.5, 0.5, 0.5,
-          0.5, 0.5, 0.5,
-          0.5, 0.5, 0.5};
+     P = {0.5, 0.55, 0.5444,
+          0.53, 0.41, 0.122,
+          0.6, 0.3, 0.23};
 
      Matrix Q;
-     Q = {0.02, 0.02, 0.02,
-          0.02, 0.02, 0.02,
-          0.02, 0.02, 0.02};
+     Q = {0.021, 0.022, 0.0243,
+          0.0242, 0.05322, 0.0214,
+          0.0132, 0.021, 0.023};
 
      Matrix K;
      K = {0.0, 0.0, 0.0,
@@ -142,22 +147,17 @@ int main(){
      Vector z;
      z = {1.3,3.2,0.443};
 
-     std::cout << s + A*s;
-     std::cout << A * P * A.transpose() + Q;
-     std::cout << A;
-     std::cout << P;
-     std::cout << (H * P * H.transpose() + R);
-     std::cout << H;
-     std::cout << P;
-     std::cout << (H * P) * H.transpose();
+     KalmanFilter::KalmanFilter KF = KalmanFilter::KalmanFilter(3,3,0);
+     KF.init(s, A, P, Q, H, R);
 
-     K = (P * H.transpose()) * (H * P * H.transpose() + R).inverse();
-     s = s + K * (z - H * s);
-     P = (I - K * H) * P;
+     KF.x_ = s;
+     KF.P_ = P;
 
-     std::cout << H;
-     std::cout << P;
-     std::cout << H * P * H.transpose();
+     std::cout << KF.P_;
+
+     std::cout << KF.get_state();
+     KF.predict_covariance();
+     std::cout << KF.get_covariance();
 
 
      // srand(time(0));
