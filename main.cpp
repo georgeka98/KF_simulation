@@ -87,6 +87,7 @@
 
 // #include "matrix_lib.cpp"
 #include "kalman_filter.hpp"
+#include "IMUs_faker.hpp"
 // #include "vector.cpp"
 #include <iostream>
 #include <cmath>
@@ -153,6 +154,10 @@ int main(){
      std::cout << KF.get_state();
 
      std::cout << P;
+
+
+     demo_IMU_data IMU_demo = demo_IMU_data("state_acc.txt");
+     IMU_demo.get_data();
 
 
      // srand(time(0));

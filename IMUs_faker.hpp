@@ -7,11 +7,11 @@ class demo_IMU_data{
 
     public:
 
-        demo_IMU_data();
+        demo_IMU_data(string file_name);
 
-        vector<vector<float> > get_data();
+        vector<vector<float>> get_data();
 
     public:
-    
-        demo_IMU_data() {};
+
+        string file_name_;
 };
