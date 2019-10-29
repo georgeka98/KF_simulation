@@ -86,6 +86,7 @@ using namespace std;
           // getting the pivot. only gets the diagnonals
           float diag_focus = guassian.entries_[row + n*row];
 
+          // swapping rows if diagnonal is zero.
           if( diag_focus == 0){
             for(int swap_row = row; swap_row < n; swap_row++){
               if(guassian.entries_[row + n*swap_row] != 0){
@@ -199,8 +200,6 @@ using namespace std;
           result_v.push_back(entry_result);
 
         }
-
-        // the for loop is wrong above. Please fix it as soon as you are back.
 
         result.set_matrix(result_v);
       }
