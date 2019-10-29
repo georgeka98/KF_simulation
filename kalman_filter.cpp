@@ -106,12 +106,18 @@ namespace KalmanFilter{
     void KalmanFilter::update_state_transition(float dt){
         Matrix A(n_, n_);
 
-        // for(int i = 0; i < n_; i++){
+        Vector s (3);
+        s = {1.0, dt, dt*dt/2}; // {displacement, velocity, acceleration placeholders}
 
-        // }
-        A = {1.0, dt, (dt*dt)/2,
-            0.0, 1.0, dt,
-            0.0, 0.0, 1.0};
+        for(int i = 0; i < n_; i++)
+        {
+            for(int j = i; j < n_; j++)
+            {
+                if (j - i % m_ == 0){
+                    A.entries_[j + i*n_] = s.entries_[(j - i)/m_];
+                }
+            }
+        }
 
         // A_ = A;
         A_ = A;

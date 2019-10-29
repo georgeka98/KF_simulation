@@ -152,6 +152,8 @@ int main(){
      std::cout << "next state: \n";
      std::cout << KF.get_state();
 
+     std::cout << P;
+
 
      // srand(time(0));
 
