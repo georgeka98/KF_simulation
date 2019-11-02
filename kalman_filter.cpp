@@ -1,6 +1,5 @@
 #include <iostream>
 #include "kalman_filter.hpp"
-// #include "matrix_lib.hpp"
 
 namespace KalmanFilter{
 
@@ -30,7 +29,27 @@ namespace KalmanFilter{
 
         I.set_matrix(identity);
 
-        I_ = I;
+        Matrix J(n_,n_);
+
+        //creating the init matrix. Find a way to add this to the matrix_lib as a method and not allow the user to assign a new value to it.
+        
+        vector <float> anti_diagnonal;
+        for(int row = 0; row < n_; row++){
+          for(int clm = 0; clm < n_; clm++){
+            if (n_ - 1 - clm == row){
+              anti_diagnonal.push_back(1);
+            }
+            else{
+              anti_diagnonal.push_back(0);
+            }
+          }
+        }
+
+        J.set_matrix(anti_diagnonal);
+
+        J_ = J;
+
+        std::cout << J_;
 
     }
 
@@ -55,7 +74,6 @@ namespace KalmanFilter{
     }
 
     Vector KalmanFilter::get_measurement(){
-
         return z_;
     }
 
@@ -67,6 +85,7 @@ namespace KalmanFilter{
     }
 
     void KalmanFilter::filter(float dt, Vector s, Vector z){
+        
         KalmanFilter::update_state_transition(dt);
 
         KalmanFilter::predict_state();
@@ -78,13 +97,15 @@ namespace KalmanFilter{
         // KalmanFilter::get_data(); // manipulate sensor data and set measurement vector
 
         KalmanFilter::estimate_state(K,z);
+        
         KalmanFilter::estimate_covariance(K);
+
     }
 
     void KalmanFilter::predict_state(){
         x_ = A_ * x_;
     }
-
+    
     void KalmanFilter::predict_covariance(){
         P_ = A_ * P_ * A_.transpose() + Q_;
     }
@@ -96,6 +117,8 @@ namespace KalmanFilter{
     }
 
     void KalmanFilter::estimate_state(Matrix K, Vector z){
+        // z = {ax,ay,az}
+        // z = {xx,xy,xz, vx,vy,vz, ax,ay,az}
         x_ = x_ + K * (z - H_ * x_);
     }
 
@@ -118,8 +141,6 @@ namespace KalmanFilter{
                 }
             }
         }
-
-        // A_ = A;
         A_ = A;
     }
 

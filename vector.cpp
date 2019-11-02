@@ -13,17 +13,31 @@ using namespace std;
     Vector::Vector(int size){  
 
       set_size(size);
+      init(size);
 
     };
 
     void Vector::set_vector(const vector<float> entries)
     {
-      entries_ = entries; 
+      for(int entry = 0; entry < size_; entry++)
+      {
+        entries_[entry] = entries[entry];
+      }
     }
 
     void Vector::set_size(int size)
     {
       size_ = size;
+      init(size);
+
+    }
+
+    void Vector::init(int size)
+    {
+      for(int i = 0; i < size; i++)
+      {
+        entries_.push_back(0.0);
+      }
     }
 
     vector<float> Vector::get_vector()
@@ -93,18 +107,32 @@ using namespace std;
       return *this;
     }
 
+    Vector Vector::operator = (const float &single)
+    {
+      entries_ = {single};
+
+      return *this;
+    }
+
     Vector Vector::operator=(const Vector &vector)
     {
-      set_vector(vector.entries_);
       set_size(vector.size_);
+      set_vector(vector.entries_);
 
       return *this;
     } 
 
     std::ostream& operator<<(std::ostream& out, const Vector &vector)
     {
-      out << vector.entries_[0] << ' ' << vector.entries_[1] << ' ' << vector.entries_[2] << '\n';
-
+      for(int i = 0; i < vector.size_; i++)
+      {
+        if (i == vector.size_ - 1){
+          out << vector.entries_[i] << '\n'; // printing last column at row i
+        }
+        else{
+          out << vector.entries_[i] << ' '; // printing column j at row i
+        }
+      }
       // TODO How about convert the abobe int oa for loop? Have a look at concatination with chars and strings.
 
       return out;

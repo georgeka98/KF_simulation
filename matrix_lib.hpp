@@ -14,7 +14,9 @@ using namespace std;
 
             void set_size(int rows, int columns);
 
-            void set_matrix(const vector<float> entries);
+            void set_matrix(vector<float> entries);
+
+            void init(int rows, int columns);
 
             vector<float> get_matrix();
 
@@ -43,9 +45,7 @@ using namespace std;
             Matrix() : 
                       rows_(0)
                     , columns_(0)
-                    , entries_({0.0,0.0,0.0,
-                                0.0,0.0,0.0,
-                                0.0,0.0,0.0}) {  }
+                    , entries_({0.0}) {  }
             //{0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0}
             int             rows_;
             int             columns_;

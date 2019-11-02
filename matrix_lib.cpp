@@ -17,21 +17,36 @@ using namespace std;
     Matrix::Matrix(int rows, int columns){  
 
       set_size(rows, columns);
-      set_matrix({0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0});
+
+      init(rows,columns);
 
     };
 
-    void Matrix::set_matrix(const vector<float> entries){
-      
-      entries_ = entries;
+    void Matrix::set_matrix(vector<float> entries){
+
+      for(int entry = 0; entry < rows_*columns_; entry++)
+      {
+        entries_[entry] = entries[entry];
+
+      }
 
     }
 
     void Matrix::set_size(int rows, int columns){
       
       rows_ = rows; 
-      columns_ = columns; 
+      columns_ = columns;
 
+      init(rows_,columns_);
+
+    }
+
+    void Matrix::init(int rows, int columns)
+    {
+      for(int entry = 0; entry < rows*columns; entry++)
+      {
+        entries_.push_back(0.0);
+      }
     }
 
     vector<float> Matrix::get_matrix()
@@ -43,14 +58,21 @@ using namespace std;
 
       Matrix transpose(columns_,rows_);
 
+      vector<float> transposed;
+      for(int row = 0; row < columns_*rows_; row++){
+        transposed.push_back(0.0);
+      }
+
       for(int row = 0; row < rows_; row++)
       {
         for(int clm = 0; clm < columns_; clm++)
         {
-          int entry = clm + row*3;
-          transpose.entries_[entry] = entries_[entry + (clm - row)*2];
+          int entry = clm + row*columns_;
+          transposed[entry] = entries_[entry + (clm - row)*(rows_-1)];
         }
       }
+
+      transpose.set_matrix(transposed);
 
       return transpose;
     }
@@ -182,25 +204,30 @@ using namespace std;
 
     Matrix Matrix::operator * (const Matrix &other){
 
-      Matrix result(3,3);
+      Matrix result(rows_,other.columns_);
 
       if (columns_ == other.rows_){
         
         vector<float> result_v;
         int n = rows_*other.columns_;
+        int row = 0;
+        int col = 0;
 
-        for(int entry = 0; entry < n; entry++){
-
-          float entry_result = 0;
-
-          for(int j = 0; j < columns_; j++){
-            entry_result = entry_result + entries_[j + rows_*floor(entry/columns_)]*other.entries_[other.columns_*j + entry % other.rows_];
+        while(row < rows_)
+        {
+          while(col < other.columns_)
+          {
+            float entry_result = 0.0;
+            for (int j = 0; j < columns_; j++)
+            {
+              entry_result = entry_result + entries_[row * columns_ + j]*other.entries_[col + other.columns_*j];            
+            }
+            result_v.push_back(entry_result);
+            col++;
           }
-
-          result_v.push_back(entry_result);
-
+          col = 0;
+          row++;
         }
-
         result.set_matrix(result_v);
       }
 
@@ -213,18 +240,22 @@ using namespace std;
 
       Vector result(rows_);
 
-      if (rows_ == other.size_){
+      if (columns_ == other.size_){
 
         vector<float> result_v;
-        int dimention = result.size_;
-        
-        for(int row = 0; row < dimention; row++){
-          
-          float row_result = 0;
-          for(int clm = 0; clm < dimention; clm++){
-            row_result = row_result + entries_[clm+dimention*row]*other.entries_[clm];
+
+        int row = 0;
+        int col = 0;
+
+        while(row < rows_)
+        {
+          float entry_result = 0.0;
+          for (int j = 0; j < columns_; j++)
+          {
+            entry_result = entry_result + entries_[row * columns_ + j]*other.entries_[col + j];            
           }
-          result_v.push_back(row_result);
+          result_v.push_back(entry_result);
+          row++;
         }
 
         result.set_vector(result_v);
@@ -243,24 +274,26 @@ using namespace std;
 
     Matrix Matrix::operator = (const Matrix matrix)
     {
-      set_matrix(matrix.entries_);
+
+
       set_size(matrix.rows_, matrix.columns_);
+      set_matrix(matrix.entries_);
 
       return *this;
     }
 
     std::ostream& operator<<(std::ostream& out, const Matrix &matrix)
     {
-
+      
       for(int i = 0; i < matrix.rows_; i++)
       {
         for(int j = 0; j < matrix.columns_; j++)
         {
           if (j == matrix.columns_ - 1){
-            out << matrix.entries_[j + i * matrix.rows_] << '\n'; // printing last column at row i
+            out << matrix.entries_[j + i * matrix.columns_] << '\n'; // printing last column at row i
           }
           else{
-            out << matrix.entries_[j + i * matrix.rows_] << ' '; // printing column j at row i
+            out << matrix.entries_[j + i * matrix.columns_] << ' '; // printing column j at row i
           }
         }
       }

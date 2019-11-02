@@ -102,12 +102,11 @@
 // #define M_PI;
 // using namespace KalmanFilter;
 
+
 int main(){
 
-     Matrix H(3,3);
-     H = {1,0,0,
-          0,1,0,
-          0,0,1};
+     Matrix H(1,3);
+     H = {1,0,0};
 
      Matrix I(3,3);
      I = {1,0,0,
@@ -120,13 +119,11 @@ int main(){
           0, 1  , 0.5,
           0, 0  , 1     };
 
-     Matrix R(3,3);
-     R = {0.0051, 0.00225, 0.005431,
-          0.0012, 0.0034, 0.00353,
-          0.00566, 0.00541, 0.005};
+     Matrix R(1,1);
+     R = {0.005};
 
      Matrix P(3,3);
-     P = {0.5, 0.55, 0.5444,
+     P = {0.333, 0.547665325, 0.5444,
           0.53, 0.41, 0.122,
           0.6, 0.3, 0.23};
 
@@ -141,40 +138,58 @@ int main(){
      Vector s_p(3);
      s_p = {0,0,0};
 
-     Vector z(3);
+     Vector z(1);
+     z = {7.3};
+
 
      KalmanFilter::KalmanFilter KF = KalmanFilter::KalmanFilter(3,1,0);
      KF.init(s, A, P, Q, H, R);
 
+     KF.set_initial(s);
+
+     std::cout << '\n';
+
      // std::cout << "state: \n";
-     // std::cout << KF.get_state();
-     // KF.filter(0.05,s,z);
-     // std::cout << "next state: \n";
-     // std::cout << KF.get_state();
-
-     // std::cout << P;
-
 
      demo_IMU_data IMU_demo = demo_IMU_data("state_acc.txt");
      vector<vector<float>> data = IMU_demo.get_data();
+     float dt;
+
+     Vector s_update(3);
 
      for(std::size_t i=0; i < data.size(); ++i)
      {
+          // if (i == 0){
+          //      z = {0,0,data[i][1]};
+          // }
+          // else{
+          //      float dt = (float)0.001*(data[i][0] - data[i-1][0]);
+          //      z = {z.entries_[0] + z.entries_[1]*dt + (float)0.5*dt*dt*data[i][1],
+          //           z.entries_[1]+data[i][1]*dt,
+          //           data[i][1]
+          //           };
+          // }
+          z = data[i][1];
+
           if (i == 0){
-               z = {0,0,data[i][1]};
+               KF.filter(0.05,s,z);
           }
           else{
-               float dt = (float)0.001*(data[i][0] - data[i-1][0]);
-               z = {z.entries_[0] + z.entries_[1]*dt + (float)0.5*dt*dt*data[i][1],
-                    z.entries_[1]+data[i][1]*dt,
-                    data[i][1]
-                    };
-          }
-          KF.filter(data[i][0]/1000,s,z);
-          std::cout << "next state: \n";
-          std::cout << KF.get_state();
-     }
+               dt = (float)0.001*(data[i][0] - data[i-1][0]);
 
+               KF.filter(dt,s,z);
+          }
+
+          // state update (Need to find out whether the state from the KF can update the speed and velocity)
+          // I think that would work if the accceleration would be at the last entry of the vector which
+          // cannot be done since from the current state formula x = x + K * (z - H * x) the result of K * (z - H * x)
+          // would be (a,v,s) amd not (s,v,a). Some extreme testing has to be taken in order to either resolve,
+          // this possible issue (it may cause less accuracy in printing the state by the vector below), but,
+          // untill then, this solution can be considered.
+          s_update = {KF.get_state().entries_[0], KF.get_state().entries_[0] * dt + s_update.entries_[1], KF.get_state().entries_[0] * dt * dt/2 + s_update.entries_[1] * dt + s_update.entries_[2]};
+
+          std::cout << s_update;
+     }
 
      // srand(time(0));
 

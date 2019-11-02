@@ -84,6 +84,7 @@ namespace KalmanFilter{
       Matrix H_;  // dimension change matrix (m x n)
       Matrix R_;  // measurement noise matrix (m x m)
       Matrix I_;  // identity matrix (n x n)
+      Matrix J_;  // anti-diagnonal matrix (J)
 
   };
 
